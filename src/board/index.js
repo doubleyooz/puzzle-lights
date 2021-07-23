@@ -1,66 +1,55 @@
-class Lamp {
-    constructor() {
-      this.isOn =  Math.floor(Math.random() * 2) === 1 ? true : false;
-      this.power = 80; 
-      this.name = "abra";     
+const lampOn = "../../assets/lamp-on.svg"; 
+const lampOff = "../../assets/lamp-off.svg";
+
+function lamp(){
+    return {
+        isOn: Math.floor(Math.random() * 2) === 1 ? true : false,
+        power: 80,
+        name : "open"  
     }
-
-    changeState(){
-        
-        this.isOn = !this.isOn;
-    }   
-
-    changeName(name){
-        this.name = name;
-    }
-
 }
 
-class Box {
-   
-    constructor(rows, columns) {
-        this.rows = rows;
-        this.columns = columns;
-        this.matrix = Array(this.rows).fill().map(
-            () => Array(this.columns).fill().map(() => new Lamp()));  
-        
-       
-    }
+function board (rows, columns){
+    return Array(rows).fill().map(
+        () => Array(columns).fill().map(() => lamp()));  
+}
 
-    changeState(row, column){
-        this.matrix[row][column].changeState();
+function changeState(img){ 
+    console.log(img.id)   
+    if(img.id === "false"){
+        img.src = lampOn
+        img.id = "true"
+    } else {
+        img.src = lampOff
+        img.id = "false"
     }
-
-    
+  
 }
 
 
-box = new Box(3, 3);
 
-var lampOn = "../../assets/lamp-on.svg"; 
+const box = board(3, 3)
+console.log(box)
 
-var lampOff = "../../assets/lamp-off.svg";
-
-
-console.log(box.matrix)
-
-box.matrix.map((row, RowIndex) => {
+box.map((row, RowIndex) => {
 
     console.log(row);
     
     row.map((lamp, ColumnIndex) => {
         console.log(RowIndex, ColumnIndex);
- 
-        if(lamp.isOn){
-           
-            document.querySelector(`[row='${RowIndex}'][column='${ColumnIndex}']`).src = lampOn;
-            console.log(document.querySelector(`[row='${RowIndex}'][column='${ColumnIndex}']`))
-        } else{
-           
-            document.querySelector(`[row='${RowIndex}'][column='${ColumnIndex}']`).src = lampOff;
-            console.log(document.querySelector(`[row='${RowIndex}'][column='${ColumnIndex}']`))
-        }
+        let temp = document.querySelector(`[row='${RowIndex}'][column='${ColumnIndex}']`)
       
+        if(lamp.isOn){
+            temp.src = lampOn;
+            temp.id = "true";
+        }  
+        else {
+            temp.src = lampOff;
+            temp.id = "false";
+        }
+                     
+        
+        temp.onclick = function() { changeState(temp) }
         
     });
     
